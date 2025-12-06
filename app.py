@@ -8,6 +8,42 @@ st.set_page_config(page_title="PDF zu PPT Generator", layout="wide")
 st.title(" AI Presentation Factory")
 st.markdown("Lade PDFs hoch, wähle Sprache & Länge und lass den Agenten arbeiten.")
 
+# --- Architecture Diagram ---
+st.subheader("Sequenzdiagramm der Architektur")
+sequence_diagram = """
+sequenceDiagram
+    participant User
+    participant Streamlit Client (Agent)
+    participant MCP Server (Tools)
+
+    User->>Streamlit Client (Agent): 1. Lädt PDFs hoch & wählt Einstellungen
+    activate Streamlit Client (Agent)
+    
+    Note over Streamlit Client (Agent): Startet den Generierungsprozess
+    
+    Streamlit Client (Agent)->>MCP Server (Tools): 2. Ruft read_pdf_file pro PDF auf
+    activate MCP Server (Tools)
+    
+    MCP Server (Tools)-->>Streamlit Client (Agent): 3. Gibt Text der PDFs zurück
+    deactivate MCP Server (Tools)
+    
+    Note right of Streamlit Client (Agent): 4. Agent ruft Gemini auf, um<br/>einen Präsentationsplan zu erstellen
+    Note right of Streamlit Client (Agent): 5. Client generiert PPTX-Datei<br/>und ruft Bilder ab
+    
+    Streamlit Client (Agent)-->>User: 6. Stellt PPTX zum Download bereit
+    deactivate Streamlit Client (Agent)
+"""
+
+# Workaround for rendering Mermaid diagrams in older Streamlit versions
+mermaid_html = f"""
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<div class="mermaid">
+    {sequence_diagram}
+</div>
+"""
+st.markdown(mermaid_html, unsafe_allow_html=True)
+# --- End of Diagram ---
+
 if not os.path.exists("storage"):
     os.makedirs("storage")
 
@@ -81,7 +117,7 @@ with col1:
                 cancel_button_placeholder.empty()
                 st.stop() # Stop execution for this run
             
-            status_box.write("1. Analysiere PDFs via MCP Server...")
+            status_box.write("▶️ Sende Anfrage vom **Streamlit Client** zum **MCP Server**...")
             if st.session_state.cancel_requested: st.stop()
 
             # Visual Proof for MCP
@@ -89,14 +125,19 @@ with col1:
             for path in st.session_state.saved_pdf_paths:
                 mcp_tool_calls_str += f"- read_pdf_file(filename='{os.path.basename(path)}')\n"
 
-            status_box.markdown("**MCP Tool Calls werden ausgeführt:**")
+            status_box.markdown("**MCP Server** führt folgende Tool Calls aus:")
             status_box.code(mcp_tool_calls_str, language="text")
 
             # WICHTIG: Hier übergeben wir jetzt die 'language' Variable
             plan = analyze_pdf_and_plan_ppt(st.session_state.saved_pdf_paths, num_slides, language)
             if st.session_state.cancel_requested: st.stop()
+
+            status_box.write("▶️ **Agent** im **Streamlit Client** erstellt den Plan (ruft Gemini auf)...")
+            if st.session_state.cancel_requested: st.stop()
             
-            status_box.write("2. Struktur erstellt! Generiere Bilder & baue PPT...")
+            status_box.write("▶️ **Streamlit Client** generiert die PowerPoint-Datei...")
+            # Wir geben die Sprache auch an den PPT-Builder weiter (für "Quellen" vs "Sources")
+            ppt_path = generate_ppt(plan, language)
             if st.session_state.cancel_requested: st.stop()
 
             # Wir geben die Sprache auch an den PPT-Builder weiter (für "Quellen" vs "Sources")
