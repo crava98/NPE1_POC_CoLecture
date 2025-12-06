@@ -1,0 +1,33 @@
+services:
+  # 1. Der Agent (Client)
+  agent-app:
+    build: .
+    container_name: agent-client
+    depends_on:
+      - mcp-server
+    volumes:
+      - .:/app
+      # Beide brauchen Zugriff auf die Daten: Der Client zum Hochladen...
+      - ./data:/app/storage 
+    ports:
+      - "8501:8501"
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Der Agent muss wissen, wo der Server ist
+      - MCP_SERVER_URL=http://mcp-server:8000/sse
+
+  # 2. Der MCP Server (Tool Provider)
+  mcp-server:
+    build: .
+    container_name: mcp-server
+    # Ruft das Objekt 'app' im Modul 'mcp_server' auf
+    entrypoint: ["uvicorn", "mcp_server:app", "--host", "0.0.0.0", "--port", "8000"]
+    volumes:
+      - .:/app
+      - ./data:/data
+    ports:
+      - "8010:8000"
+    environment:
+      - PYTHONUNBUFFERED=1

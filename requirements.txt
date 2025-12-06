@@ -1,0 +1,16 @@
+streamlit
+langchain-google-genai>=2.0.0
+google-generativeai>=0.8.0
+langchain-core
+python-pptx
+requests
+python-dotenv
+watchdog
+pydantic
+# NEU für MCP:
+mcp
+fastapi
+uvicorn
+httpx
+# pypdf ist hier eigentlich nur noch für den Server nötig, aber wir lassen es drin
+pypdf
