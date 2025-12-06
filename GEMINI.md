@@ -25,6 +25,7 @@ The application is composed of two main services, orchestrated by `docker-compos
 
 1.  **`agent-app` (Streamlit Client):**
     -   Provides a web interface for users to upload PDF files, select presentation options (language, number of slides), and download the generated presentation.
+    -   Includes "Cancel" and "Reset" buttons to provide better user control over the generation process.
     -   Communicates with the `mcp-server` to request PDF content processing.
     -   Calls the Gemini API to generate the presentation structure.
     -   Calls the `ppt_engine` to generate the final `.pptx` file.
@@ -80,3 +81,4 @@ To run the application, you need to have Docker and Docker Compose installed.
 - The `agent_logic.py` file contains the core business logic, separating it from the Streamlit UI code in `app.py`.
 - The `ppt_engine.py` file encapsulates the logic for creating the PowerPoint presentation.
 - Environment variables are used to manage configuration and secrets.
+- `st.session_state` is used to manage application state across reruns, including uploaded files and user actions like cancellation.
