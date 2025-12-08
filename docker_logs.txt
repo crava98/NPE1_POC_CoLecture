@@ -1,0 +1,818 @@
+mcp-server  | INFO:     Started server process [1]
+mcp-server  | INFO:     Waiting for application startup.
+mcp-server  | INFO:     Application startup complete.
+mcp-server  | INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+mcp-server  | INFO:     172.18.0.3:38158 - "GET /sse HTTP/1.1" 200 OK
+mcp-server  | INFO:     172.18.0.3:38164 - "POST /messages?session_id=184b891935a24cc4946ee6a30e0a748d HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:38164 - "POST /messages?session_id=184b891935a24cc4946ee6a30e0a748d HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:38164 - "POST /messages?session_id=184b891935a24cc4946ee6a30e0a748d HTTP/1.1" 202 Accepted
+mcp-server  | MCP Server: Liste Templates...
+mcp-server  | INFO:     172.18.0.3:38164 - "POST /messages?session_id=184b891935a24cc4946ee6a30e0a748d HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:38180 - "GET /sse HTTP/1.1" 200 OK
+mcp-server  | INFO:     172.18.0.3:38184 - "POST /messages?session_id=5d1a77c609534533a692132dfd41e17c HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:34972 - "GET /sse HTTP/1.1" 200 OK
+mcp-server  | INFO:     172.18.0.3:34984 - "POST /messages?session_id=d8792687132f496481e23a9ab026e70e HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:34984 - "POST /messages?session_id=d8792687132f496481e23a9ab026e70e HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:34984 - "POST /messages?session_id=d8792687132f496481e23a9ab026e70e HTTP/1.1" 202 Accepted
+mcp-server  | MCP Server: Lade Template-Datei /data/templates/Technology Market Research Pitch Deck by Slidesgo.pptx...
+mcp-server  |   Template geladen: 5.8 MB
+mcp-server  | INFO:     172.18.0.3:34984 - "POST /messages?session_id=d8792687132f496481e23a9ab026e70e HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:34988 - "GET /sse HTTP/1.1" 200 OK
+mcp-server  | INFO:     172.18.0.3:34992 - "POST /messages?session_id=2941e08e3c4a41d5889d51d32844912a HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:34992 - "POST /messages?session_id=2941e08e3c4a41d5889d51d32844912a HTTP/1.1" 202 Accepted
+mcp-server  | INFO:     172.18.0.3:34992 - "POST /messages?session_id=2941e08e3c4a41d5889d51d32844912a HTTP/1.1" 202 Accepted
+mcp-server  | MCP Server: Analysiere Template /data/templates/Technology Market Research Pitch Deck by Slidesgo.pptx...
+mcp-server  |   - Classifying layout: TITLE
+mcp-server  |     - Raw placeholder type: CENTER_TITLE (3)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['CENTER_TITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: SECTION_HEADER
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'TITLE']
+mcp-server  |     - Classified as: Title Only
+mcp-server  |   - Classifying layout: TITLE_AND_BODY
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: BODY (2)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'BODY']
+mcp-server  |     - Classified as: Title and Content
+mcp-server  |   - Classifying layout: TITLE_AND_TWO_COLUMNS
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: TITLE_ONLY
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Extracted placeholder types: ['TITLE']
+mcp-server  |     - Classified as: Title Only
+mcp-server  |   - Classifying layout: ONE_COLUMN_TEXT
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: PICTURE (18)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE', 'PICTURE']
+mcp-server  |     - Classified as: Title and Image
+mcp-server  |   - Classifying layout: MAIN_POINT
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Extracted placeholder types: ['TITLE']
+mcp-server  |     - Classified as: Title Only
+mcp-server  |   - Classifying layout: SECTION_TITLE_AND_DESCRIPTION
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CAPTION_ONLY
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Extracted placeholder types: ['TITLE']
+mcp-server  |     - Classified as: Title Only
+mcp-server  |   - Classifying layout: BIG_NUMBER
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: BLANK
+mcp-server  |     - Extracted placeholder types: []
+mcp-server  |     - Classified as: Other (fallback)
+mcp-server  |   - Classifying layout: BLANK_1_1_1_1_1_1
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'TITLE', 'TITLE', 'TITLE', 'TITLE', 'TITLE', 'TITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CUSTOM_12
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CUSTOM_12_1
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CUSTOM_6
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CUSTOM_5
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CUSTOM_7
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CUSTOM_8
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Raw placeholder type: SUBTITLE (4)
+mcp-server  |     - Extracted placeholder types: ['TITLE', 'SUBTITLE', 'TITLE', 'SUBTITLE', 'TITLE', 'SUBTITLE']
+mcp-server  |     - Classified as: Title and Subtitle
+mcp-server  |   - Classifying layout: CUSTOM_10
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Extracted placeholder types: ['TITLE']
+mcp-server  |     - Classified as: Title Only
+mcp-server  |   - Classifying layout: CUSTOM_10_1
+mcp-server  |     - Raw placeholder type: TITLE (1)
+mcp-server  |     - Extracted placeholder types: ['TITLE']
+mcp-server  |     - Classified as: Title Only
+mcp-server  |   - Classifying layout: CUSTOM_3_1
+mcp-server    |     - Raw placeholder type: TITLE (1)
+agent-client  | 
+mcp-server    |     - Raw placeholder type: SUBTITLE (4)
+mcp-server    |     - Extracted placeholder types: ['TITLE', 'SUBTITLE']
+mcp-server    |     - Classified as: Title and Subtitle
+mcp-server    |   - Classifying layout: CUSTOM_9
+mcp-server    |     - Extracted placeholder types: []
+mcp-server    |     - Classified as: Other (fallback)
+mcp-server    |   - Classifying layout: CUSTOM_9_1
+mcp-server    |     - Extracted placeholder types: []
+agent-client  | Collecting usage statistics. To deactivate, set browser.gatherUsageStats to false.
+agent-client  | 
+mcp-server    |     - Classified as: Other (fallback)
+mcp-server    | INFO:     172.18.0.3:34992 - "POST /messages?session_id=2941e08e3c4a41d5889d51d32844912a HTTP/1.1" 202 Accepted
+mcp-server    | INFO:     172.18.0.3:45906 - "GET /sse HTTP/1.1" 200 OK
+mcp-server    | INFO:     172.18.0.3:45920 - "POST /messages?session_id=26fae3736bff4ca7a6c1ea2dcbd491da HTTP/1.1" 202 Accepted
+mcp-server    | INFO:     172.18.0.3:45920 - "POST /messages?session_id=26fae3736bff4ca7a6c1ea2dcbd491da HTTP/1.1" 202 Accepted
+mcp-server    | INFO:     172.18.0.3:45920 - "POST /messages?session_id=26fae3736bff4ca7a6c1ea2dcbd491da HTTP/1.1" 202 Accepted
+mcp-server    | MCP Server: Liste Templates...
+mcp-server    | INFO:     172.18.0.3:45920 - "POST /messages?session_id=26fae3736bff4ca7a6c1ea2dcbd491da HTTP/1.1" 202 Accepted
+agent-client  | 
+agent-client  |   You can now view your Streamlit app in your browser.
+agent-client  | 
+agent-client  |   URL: http://0.0.0.0:8501
+agent-client  | 
+agent-client  | --> Agent 2: Frage MCP Server nach Templates...
+agent-client  | --> Starte MCP Client Verbindung...
+agent-client  | --> Sende Anfrage an Gemini...
+agent-client  | 
+agent-client  | ============================================================
+agent-client  | AGENT 2: PPT BUILDER AGENT
+agent-client  | ============================================================
+agent-client  | --> Agent 2: Lade Template-Datei 'Technology Market Research Pitch Deck by Slidesgo.pptx' über MCP...
+agent-client  |   ✓ Template geladen: 5.8 MB
+agent-client  | --> Agent 2: Analysiere Template 'Technology Market Research Pitch Deck by Slidesgo.pptx' via MCP...
+agent-client  | ✓ Template via MCP geladen: Technology Market Research Pitch Deck by Slidesgo.pptx
+agent-client  |   Dimensionen: 10.0" x 5.62"
+agent-client  |   Verfügbare Layouts: 23
+agent-client  |   Template Analysis (first 2000 chars):
+agent-client  | {
+agent-client  |   "template_name": "Technology Market Research Pitch Deck by Slidesgo.pptx",
+agent-client  |   "slide_width_inches": 10.0,
+agent-client  |   "slide_height_inches": 5.62,
+agent-client  |   "total_layouts": 23,
+agent-client  |   "layouts": [
+agent-client  |     {
+agent-client  |       "index": 0,
+agent-client  |       "name": "TITLE",
+agent-client  |       "classified_type": "Title and Subtitle",
+agent-client  |       "placeholders": [
+agent-client  |         {
+agent-client  |           "idx": 0,
+agent-client  |           "type": "CENTER_TITLE (3)",
+agent-client  |           "has_text_frame": true
+agent-client  |         },
+agent-client  |         {
+agent-client  |           "idx": 1,
+agent-client  |           "type": "SUBTITLE (4)",
+agent-client  |           "has_text_frame": true
+agent-client  |         }
+agent-client  |       ]
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "index": 1,
+agent-client  |       "name": "SECTION_HEADER",
+agent-client  |       "classified_type": "Title Only",
+agent-client  |       "placeholders": [
+agent-client  |         {
+agent-client  |           "idx": 0,
+agent-client  |           "type": "TITLE (1)",
+agent-client  |           "has_text_frame": true
+agent-client  |         },
+agent-client  |         {
+agent-client  |           "idx": 2,
+agent-client  |           "type": "TITLE (1)",
+agent-client  |           "has_text_frame": true
+agent-client  |         }
+agent-client  |       ]
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "index": 2,
+agent-client  |       "name": "TITLE_AND_BODY",
+agent-client  |       "classified_type": "Title and Content",
+agent-client  |       "placeholders": [
+agent-client  |         {
+agent-client  |           "idx": 0,
+agent-client  |           "type": "TITLE (1)",
+agent-client  |           "has_text_frame": true
+agent-client  |         },
+agent-client  |         {
+agent-client  |           "idx": 1,
+agent-client  |           "type": "BODY (2)",
+agent-client  |           "has_text_frame": true
+agent-client  |         }
+agent-client  |       ]
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "index": 3,
+agent-client  |       "name": "TITLE_AND_TWO_COLUMNS",
+agent-client  |       "classified_type": "Title and Subtitle",
+agent-client  |       "placeholders": [
+agent-client  |         {
+agent-client  |           "idx": 0,
+agent-client  |           "type": "TITLE (1)",
+agent-client  |           "has_text_frame": true
+agent-client  |         },
+agent-client  |         {
+agent-client  |           "idx": 1,
+agent-client  |           "type": "SUBTITLE (4)",
+agent-client  |           "has_text_frame": true
+agent-client  |         },
+agent-client  |         {
+agent-client  |           "idx": 2,
+agent-client  |           "type": "SUBTITLE (4)",
+agent-client  |           "has_text_frame": true
+agent-client  |         },
+agent-client  |         {
+agent-client  |           "idx": 3,
+agent-client  |           "type": "SUBTITLE (4)",
+agent-client  |           "has_text_frame": true
+agent-client  |         },
+agent-client  |         {
+agent-client  |           "idx": 4,
+agent-client  |           "type": "SUBTITLE (4)",
+agent-client  |           "has_text_frame": true
+agent-client  |         }
+agent-client  |       ]
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "index": 4,
+agent-client  |       "name": "TITLE_ONLY",
+agent-client  |       "classified_type": "Title Only",
+agent-client  |   
+agent-client  |   ... (truncated)
+agent-client  |   ✓ Presentation aus Template-Bytes erstellt
+agent-client  |   ✓ 41 Beispiel-Folien entfernt
+agent-client  | 
+agent-client  | ============================================================
+agent-client  | GENERIERE SLIDES MIT INTELLIGENTER LAYOUT-WAHL
+agent-client  | ============================================================
+agent-client  | 
+agent-client  | Slide 1: MCP Server: Eine Einführung
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 1 von 8:
+agent-client  |     Titel: MCP Server: Eine Einführung
+agent-client  | Punkte: 2
+agent-client  | - Was ist ein MCP Server?
+agent-client  | - Ziele der Präsentation
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Subtitle gesetzt: 'Was ist ein MCP Server? | Ziele der Präsentation...'
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "MCP Server: Eine Einführung",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "server",
+agent-client  |     "data center",
+agent-client  |     "technology"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "Was ist ein MCP Server?",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Ziele der Präsentation",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: server
+agent-client  |   ✓ Bild eingefügt (Position: 6.2" x 2.0")
+agent-client  | 
+agent-client  | Slide 2: Grundlagen und Architektur
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 2 von 8:
+agent-client  |     Titel: Grundlagen und Architektur
+agent-client  | Punkte: 3
+agent-client  | - Kernkomponenten des MCP Servers
+agent-client  | - Aufbau und Funktionsweise
+agent-client  | - Skalierbarkeit und Modularität
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Content Placeholder: idx=1
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "Grundlagen und Architektur",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "server architecture",
+agent-client  |     "network",
+agent-client  |     "components"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "Kernkomponenten des MCP Servers",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Aufbau und Funktionsweise",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Skalierbarkeit und Modularität",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: server architecture
+agent-client  | 
+agent-client  | Slide 3: Vorteile des MCP Servers
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 3 von 8:
+agent-client  |     Titel: Vorteile des MCP Servers
+agent-client  | Punkte: 3
+agent-client  | - Hohe Leistung und Zuverlässigkeit
+agent-client  | - Kosteneffizienz und Skalierbarkeit
+agent-client  | - Einfache Verwaltung und Wartung
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Content Placeholder: idx=1
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "Vorteile des MCP Servers",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "benefits",
+agent-client  |     "efficiency",
+agent-client  |     "performance"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "Hohe Leistung und Zuverlässigkeit",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Kosteneffizienz und Skalierbarkeit",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Einfache Verwaltung und Wartung",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: benefits
+agent-client  |   ✓ Bild eingefügt (Position: 6.2" x 2.0")
+agent-client  | 
+agent-client  | Slide 4: Anwendungsbereiche
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 4 von 8:
+agent-client  |     Titel: Anwendungsbereiche
+agent-client  | Punkte: 3
+agent-client  | - Webhosting und Cloud-Dienste
+agent-client  | - Datenbanken und Big Data
+agent-client  | - Enterprise-Lösungen
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Content Placeholder: idx=1
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "Anwendungsbereiche",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "use cases",
+agent-client  |     "applications",
+agent-client  |     "industry"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "Webhosting und Cloud-Dienste",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Datenbanken und Big Data",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Enterprise-Lösungen",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: use cases
+agent-client  | 
+agent-client  | Slide 5: Sicherheit und Datenschutz
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 5 von 8:
+agent-client  |     Titel: Sicherheit und Datenschutz
+agent-client  | Punkte: 3
+agent-client  | - Robuste Sicherheitsmechanismen
+agent-client  | - Datenschutzkonformität (DSGVO)
+agent-client  | - Notfallwiederherstellungskonzepte
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Content Placeholder: idx=1
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "Sicherheit und Datenschutz",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "security",
+agent-client  |     "data protection",
+agent-client  |     "cybersecurity"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "Robuste Sicherheitsmechanismen",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Datenschutzkonformität (DSGVO)",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Notfallwiederherstellungskonzepte",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: security
+agent-client  |   ✓ Bild eingefügt (Position: 6.2" x 2.0")
+agent-client  | 
+agent-client  | Slide 6: Implementierung und Best Practices
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 6 von 8:
+agent-client  |     Titel: Implementierung und Best Practices
+agent-client  | Punkte: 3
+agent-client  | - Planung und Installation
+agent-client  | - Konfiguration und Optimierung
+agent-client  | - Regelmäßige Wartung
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Content Placeholder: idx=1
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "Implementierung und Best Practices",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "implementation",
+agent-client  |     "best practices",
+agent-client  |     "setup"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "Planung und Installation",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Konfiguration und Optimierung",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Regelmäßige Wartung",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: implementation
+agent-client  |   ✓ Bild eingefügt (Position: 6.2" x 2.0")
+agent-client  | 
+agent-client  | Slide 7: Zukünftige Entwicklungen
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 7 von 8:
+agent-client  |     Titel: Zukünftige Entwicklungen
+agent-client  | Punkte: 3
+agent-client  | - KI und Automatisierung
+agent-client  | - Edge Computing Integration
+agent-client  | - Nachhaltigkeit im Rechenzentrum
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Content Placeholder: idx=1
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "Zukünftige Entwicklungen",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "future",
+agent-client  |     "innovation",
+agent-client  |     "trends"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "KI und Automatisierung",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Edge Computing Integration",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Nachhaltigkeit im Rechenzentrum",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: future
+agent-client  |   ✓ Bild eingefügt (Position: 6.2" x 2.0")
+agent-client  | 
+agent-client  | Slide 8: Zusammenfassung und Fragen
+agent-client  |   Prompt for LLM:
+agent-client  | 
+agent-client  |     Du bist ein Experte für Präsentationsdesign.
+agent-client  |     Klassifiziere den folgenden Folieninhalt in eine der folgenden Kategorien:
+agent-client  |     Title Only, Title and Content, Title, Content and Image, Content Only, Title and Image, Image Only, Two Content, Vertical Text, Other
+agent-client  |     
+agent-client  |     Folie 8 von 8:
+agent-client  |     Titel: Zusammenfassung und Fragen
+agent-client  | Punkte: 2
+agent-client  | - Wichtige Erkenntnisse
+agent-client  | - Diskussion und Fragen
+agent-client  | 
+agent-client  |     
+agent-client  |     Antworte NUR mit dem Namen der am besten passenden Kategorie (z.B. "Title and Content").
+agent-client  |     
+agent-client  | ---
+agent-client  |   LLM-Vorschlag für Content-Typ: Title and Content
+agent-client  |   → Layout gefunden (genaue Übereinstimmung mit 'Title and Content'): TITLE_AND_BODY
+agent-client  |   Content Placeholder: idx=1
+agent-client  | 
+agent-client  | ========================================
+agent-client  | --> DEBUG: SENDE DIESES JSON AN gurk.li:
+agent-client  | {
+agent-client  |   "title": "Zusammenfassung und Fragen",
+agent-client  |   "sources": [],
+agent-client  |   "unsplashSearchTerms": [
+agent-client  |     "summary",
+agent-client  |     "questions",
+agent-client  |     "discussion"
+agent-client  |   ],
+agent-client  |   "bullets": [
+agent-client  |     {
+agent-client  |       "bullet": "Wichtige Erkenntnisse",
+agent-client  |       "sub": []
+agent-client  |     },
+agent-client  |     {
+agent-client  |       "bullet": "Diskussion und Fragen",
+agent-client  |       "sub": []
+agent-client  |     }
+agent-client  |   ],
+agent-client  |   "image_mode": "ai_only",
+agent-client  |   "ai_model": "banana",
+agent-client  |   "style": [
+agent-client  |     "modern",
+agent-client  |     "minimal",
+agent-client  |     "professional"
+agent-client  |   ],
+agent-client  |   "colors": {
+agent-client  |     "primary": "#0066CC",
+agent-client  |     "secondary": "#00CC66"
+agent-client  |   }
+agent-client  | }
+agent-client  | ========================================
+agent-client  | 
+agent-client  | gurk.li Fehler: 500 - {"detail":"Error code: 402 - {'error': {'message': 'This request requires more credits, or fewer max_tokens. You requested up to 8192 tokens, but can only afford 1181. To increase, visit https://openrouter.ai/settings/keys and create a key with a higher total limit', 'code': 402, 'metadata': {'provider_name': None}}, 'user_id': 'user_2wRlkhoYcp0DUdPGRobUVtjc2Mw'}"}
+agent-client  | --> Hole Platzhalter-Bild für: summary
+agent-client  |   ✓ Bild eingefügt (Position: 6.2" x 2.0")
+agent-client  | 
+agent-client  | ============================================================
+agent-client  | ✓ AGENT 2: PPT erfolgreich erstellt: storage/generated_presentation_Deutsch.pptx
+agent-client  | ============================================================
+agent-client  | 
+agent-client  | --- Analyzing presentation: storage/generated_presentation_Deutsch.pptx ---
+agent-client  | Presentation loaded successfully. Number of slides: 8
+agent-client  |   - Analyzing slide 1, layout: TITLE_AND_BODY
+agent-client  |   - Analyzing slide 2, layout: TITLE_AND_BODY
+agent-client  |   - Analyzing slide 3, layout: TITLE_AND_BODY
+agent-client  |   - Analyzing slide 4, layout: TITLE_AND_BODY
+agent-client  |   - Analyzing slide 5, layout: TITLE_AND_BODY
+agent-client  |   - Analyzing slide 6, layout: TITLE_AND_BODY
+agent-client  |   - Analyzing slide 7, layout: TITLE_AND_BODY
+agent-client  |   - Analyzing slide 8, layout: TITLE_AND_BODY
+agent-client  | --- Analysis complete ---
+agent-client  | --- PDF report generated at: storage/analysis_report.pdf ---
+agent-client  | --> Agent 2: Frage MCP Server nach Templates...

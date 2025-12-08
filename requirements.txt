@@ -12,5 +12,6 @@ mcp
 fastapi
 uvicorn
 httpx
+fpdf2
 # pypdf ist hier eigentlich nur noch für den Server nötig, aber wir lassen es drin
 pypdf

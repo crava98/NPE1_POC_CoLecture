@@ -1,84 +1,72 @@
 # Gemini Code Assistant Context
 
-This document provides context for the Gemini Code Assistant to understand the project structure, purpose, and key components.
+This document provides context for the AI Presentation Factory project.
 
 ## Project Overview
 
-This project is a Python-based application that automatically generates PowerPoint presentations from PDF documents. It consists of a Streamlit web interface for user interaction and a FastAPI backend for processing PDF files. The application is designed to be run in a containerized environment using Docker.
+This project is a web-based "AI Presentation Factory" that generates professional PowerPoint presentations from PDF documents. It is a Python application built with a client-server architecture.
 
-The core functionality is powered by the Gemini 1.5 Flash language model, which is used to analyze the content of the uploaded PDFs and generate a structured presentation plan. This plan is then used to create a PowerPoint presentation, including fetching relevant images for each slide.
+**Core Functionality:**
 
-### Key Technologies
+1.  **PDF Analysis (Agent 1):** A user uploads PDF documents. The system analyzes the content and creates a structured plan for a presentation (e.g., titles, bullet points, image search terms for each slide).
+2.  **PPT Generation (Agent 2):** Based on the plan, the system generates a `.pptx` file. It intelligently selects slide layouts from a template, chooses color schemes, and fetches appropriate images (either from stock photo providers or by generating them with an AI).
 
-- **Frontend:** Streamlit
-- **Backend:** FastAPI, Uvicorn
-- **Language Model:** Google Gemini 1.5 Flash (via `langchain-google-genai`)
-- **PDF Processing:** `pypdf`
-- **Presentation Generation:** `python-pptx`
-- **Containerization:** Docker, Docker Compose
-- **Communication:** `mcp` library for client-server communication using Server-Sent Events (SSE)
-- **Image Generation (optional):** n8n webhook integration
+**Architecture:**
 
-### Architecture
-
-The application is composed of two main services, orchestrated by `docker-compose.yml`:
+The application consists of two main services orchestrated by Docker Compose:
 
 1.  **`agent-app` (Streamlit Client):**
-    -   Provides a web interface for users to upload PDF files, select presentation options (language, number of slides), and download the generated presentation.
-    -   Includes "Cancel" and "Reset" buttons to provide better user control over the generation process.
-    -   Communicates with the `mcp-server` to request PDF content processing.
-    -   Calls the Gemini API to generate the presentation structure.
-    -   Calls the `ppt_engine` to generate the final `.pptx` file.
+    *   The user-facing web interface, built with Streamlit.
+    *   It handles file uploads, user configuration (language, number of slides, etc.), and displays the final presentation for download.
+    *   The UI and business logic are primarily in German.
+    *   Entrypoint: `app.py`
 
-2.  **`mcp-server` (FastAPI Backend):**
-    -   A "tool provider" server that exposes a single tool: `read_pdf_file`.
-    -   This tool reads the text content from a PDF file stored in the `data` volume.
-    -   The server listens for requests from the `agent-app` via SSE.
+2.  **`mcp-server` (FastAPI Server):**
+    *   A "Multi-Capability Provider" (MCP) backend server built with FastAPI.
+    *   It acts as a tool provider for the Streamlit client. It exposes functionalities that require direct access to the file system or other resources.
+    *   **Tools provided:** Reading PDF files (`read_pdf_file`), listing presentation templates (`list_templates`), analyzing templates (`analyze_template`), and providing template files (`get_template_file`).
+    *   Entrypoint: `mcp_server.py`
 
-### File Structure
+**Key Technologies:**
 
-- `app.py`: The main entry point for the Streamlit application.
-- `agent_logic.py`: Contains the core logic for orchestrating the PDF analysis and presentation planning. It communicates with both the `mcp-server` and the Gemini API.
-- `ppt_engine.py`: Responsible for generating the PowerPoint presentation from the structured data provided by the agent. It also handles fetching images for the slides.
-- `mcp_server.py`: The FastAPI application that acts as a tool server for reading PDF files.
-- `data_models.py`: Defines the Pydantic data models used for structuring the presentation plan.
-- `docker-compose.yml`: Defines the services, networks, and volumes for the containerized application.
-- `Dockerfile`: Used to build the Docker image for both the `agent-app` and `mcp-server`.
-- `requirements.txt`: Lists the Python dependencies for the project.
-- `data/`: A directory for storing data, including uploaded PDFs and generated presentations. It is mounted as a volume in the containers.
-- `storage/`: A directory for storing generated files.
-- `.env`: A file for storing environment variables, such as API keys.
+*   **Frontend:** Streamlit
+*   **Backend:** FastAPI
+*   **AI/LLM:** Google Gemini (`gemini-2.5-flash`) via `langchain-google-genai`
+*   **PowerPoint Generation:** `python-pptx`
+*   **Containerization:** Docker, Docker Compose
+*   **Data Validation:** Pydantic
 
-## Building and Running
+## Building and Running the Project
 
-To run the application, you need to have Docker and Docker Compose installed.
+The project is designed to be run with Docker.
 
-1.  **Environment Variables:**
-    -   Create a `.env` file in the root of the project.
-    -   Add your Google API key to the `.env` file:
-        ```
-        GOOGLE_API_KEY="your_google_api_key"
-        ```
-    -   (Optional) If you have an n8n webhook for image generation, add it to the `.env` file:
-        ```
-        N8N_WEBHOOK_URL="your_n8n_webhook_url"
-        N8N_AUTH_TOKEN="your_n8n_auth_token"
-        ```
+**Prerequisites:**
 
-2.  **Build and Run with Docker Compose:**
-    ```bash
-    docker-compose up --build
-    ```
+*   Docker and Docker Compose must be installed.
+*   A `.env` file must be present in the root directory, containing at least the `GOOGLE_API_KEY`.
 
-3.  **Access the Application:**
-    -   **Streamlit App:** Open your web browser and go to `http://localhost:8501`.
-    -   **MCP Server:** The server is accessible at `http://localhost:8010`, but it is primarily used for communication with the `agent-app`.
+**To start the application:**
+
+```bash
+docker-compose up --build
+```
+
+This command will:
+1.  Build the Docker image as defined in the `Dockerfile`.
+2.  Start both the `agent-app` and `mcp-server` containers.
+
+**Accessing the services:**
+
+*   **Streamlit Web App:** `http://localhost:8501`
+*   **FastAPI Server (MCP):** `http://localhost:8010` (The server runs on port 8000 inside the container, but is exposed as 8010 on the host).
 
 ## Development Conventions
 
-- The application uses type hints and Pydantic models for data validation and structuring.
-- The `mcp` library is used for communication between the client and server.
-- The `agent_logic.py` file contains the core business logic, separating it from the Streamlit UI code in `app.py`.
-- The `ppt_engine.py` file encapsulates the logic for creating the PowerPoint presentation.
-- Environment variables are used to manage configuration and secrets.
-- `st.session_state` is used to manage application state across reruns, including uploaded files and user actions like cancellation.
+*   **Client-Server Communication:** The Streamlit client communicates with the FastAPI server via Server-Sent Events (SSE). The client does not access the file system directly for tasks like reading PDFs or templates; it calls tools on the `mcp-server`.
+*   **Agent-Based Logic:** The core logic is split into two "agents":
+    *   **Agent 1 (`agent_logic.py`):** Plans the presentation structure.
+    *   **Agent 2 (`ppt_agent.py`):** Builds the presentation file.
+*   **Configuration:** The application uses a `.env` file for secrets and environment-specific configuration.
+*   **Language:** The user interface and a significant portion of the internal code (prompts, comments) are in German.
+*   **Templates:** PowerPoint templates are stored in the `data/templates` directory and are served by the `mcp-server`.
+*   **Output:** Generated presentations and other temporary files are stored in the `storage` directory, which is shared between the host and the `agent-app` container.
