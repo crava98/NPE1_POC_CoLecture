@@ -6,16 +6,13 @@ services:
     depends_on:
       - mcp-server
     volumes:
-      - .:/app
-      # Beide brauchen Zugriff auf die Daten: Der Client zum Hochladen...
-      - ./data:/app/storage
+      # Nur Daten-Volumes, NICHT .:/app (überschreibt Source Code im Container)
+      - ppt-data:/app/storage
     ports:
       - "${AGENT_PORT:-8501}:8501"
     environment:
       - PYTHONUNBUFFERED=1
-      # Der Agent muss wissen, wo der Server ist
       - MCP_SERVER_URL=http://mcp-server:8000/sse
-      # Set in Portainer or .env file
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
       - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-}
       - N8N_AUTH_TOKEN=${N8N_AUTH_TOKEN:-}
@@ -24,11 +21,10 @@ services:
   mcp-server:
     build: .
     container_name: mcp-server
-    # Ruft das Objekt 'app' im Modul 'mcp_server' auf
     entrypoint: ["uvicorn", "mcp_server:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
-      - .:/app
-      - ./data:/data
+      # Daten-Volume für PDFs und Templates
+      - ppt-data:/data
     ports:
       - "${MCP_PORT:-8020}:8000"
     environment:
@@ -39,7 +35,7 @@ services:
     image: ngrok/ngrok:latest
     container_name: ngrok-tunnel
     profiles:
-      - external  # Nur starten mit: docker-compose --profile external up
+      - external
     depends_on:
       - agent-app
     ports:
@@ -47,3 +43,7 @@ services:
     environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN:-}
     command: ["http", "--basic-auth", "Student:hslu5in5rotkreuz", "agent-app:8501"]
+
+volumes:
+  ppt-data:
+    driver: local
