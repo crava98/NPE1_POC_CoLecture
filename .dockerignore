@@ -28,11 +28,12 @@ env/
 .DS_Store
 Thumbs.db
 
-# Project specific - nur generierte Dateien im data/ root
+# Project specific - nur generierte Dateien im data/ root (nicht templates!)
 data/*.pdf
 data/*.jpg
 data/*.png
 data/generated_*.pptx
+!data/templates/
 
 # Documentation
 *.md
