@@ -31,3 +31,16 @@ services:
       - "8010:8000"
     environment:
       - PYTHONUNBUFFERED=1
+
+  # 3. ngrok für den externen Zugriff
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ngrok-tunnel
+    depends_on:
+      - agent-app
+    ports:
+      - "4040:4040"
+    environment:
+      # NGROK_AUTHTOKEN wird aus der .env-Datei gelesen
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command: ["http", "--basic-auth", "Student:hslu5in5rotkreuz", "agent-app:8501"]

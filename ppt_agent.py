@@ -23,6 +23,7 @@ from mcp import ClientSession
 from mcp.client.sse import sse_client
 from data_models import PresentationStructure, ImageColors
 from image_providers import get_image_from_gurkli
+import streamlit as st # Hinzugefügt für Abbruch-Erkennung
 
 load_dotenv()
 api_key = os.environ.get("GOOGLE_API_KEY")
@@ -31,7 +32,7 @@ mcp_server_url = os.environ.get("MCP_SERVER_URL", "http://mcp-server:8000/sse")
 # LLM für Layout-Entscheidungen
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
-    temperature=0.1,  # Niedrig für konsistente Entscheidungen
+    temperature=0.3,  # Erhöht für mehr Varianz
     google_api_key=api_key
 )
 
@@ -163,7 +164,7 @@ def decide_colors_for_presentation(presentation_data, template_analysis=None):
                 secondary = f"#{secondary}"
 
         print(f"  🎨 Agent wählt Farben: Primary={primary}, Secondary={secondary}")
-        return {"primary": primary, "secondary": secondary}
+        return {"primary": primary, "secondary": "#00CC66"}
 
     except Exception as e:
         print(f"  ⚠ Fehler beim Parsen der Farben: {e} - Verwende Fallback")
@@ -182,31 +183,30 @@ def decide_image_style_for_slide(slide_data):
         content_summary += f"- {item.bullet}\n"
 
     prompt = f"""
-    Du bist ein Experte für Präsentationsdesign. Wähle den besten Bildstil für diese Folie.
+    Du bist ein Experte für kreatives und ansprechendes Präsentationsdesign. Deine Aufgabe ist es, den am besten passenden Bildstil für eine einzelne Folie auszuwählen. Wäge die Optionen sorgfältig ab.
 
-    **Verfügbare Stile:**
-    - flat_illustration: Moderne, flache Illustrationen mit klaren Formen und wenig Details.
-      IDEAL FÜR: Abstrakte Konzepte, Software/Apps, digitale Transformation, Prozessübersichten, Teamwork-Konzepte, Innovation als Idee.
-      BEISPIELE: "Agile Methoden", "Cloud Computing Vorteile", "Unternehmenskultur"
+    **Verfügbare Stile und ihre Anwendung:**
+    - **photorealistic:** Für greifbare, reale Themen. Wähle diesen Stil, wenn die Folie klar über physische Objekte, Orte, Personen oder etablierte Industrien (z.B. Automobil, Finanzen, Bau) spricht.
+      *Stichworte: Wirtschaft, Produktion, Lieferkette, Menschen, Natur, Stadt, Handel.*
 
-    - fine_line: Feine, detaillierte Linienzeichnungen mit technischem Look.
-      IDEAL FÜR: Technische Abläufe, Architektur-Diagramme, wissenschaftliche Konzepte, Blueprints, Engineering.
-      BEISPIELE: "Systemarchitektur", "Produktionsprozess", "Technische Spezifikationen"
+    - **flat_illustration:** Für abstrakte Ideen, Prozesse und digitale Konzepte. Wähle diesen Stil, wenn es um Strategien, Software, Daten, Marketing, Innovation oder immaterielle Dienstleistungen geht.
+      *Stichworte: Cloud, Strategie, Prozess, Teamwork, Wachstum, Analyse, Sicherheit.*
 
-    - photorealistic: Fotorealistische Bilder mit echten Objekten und Szenen.
-      IDEAL FÜR: Physische Produkte, Industrie, Fahrzeuge, Gebäude, Menschen, Natur, reale Wirtschaftsthemen, Handel, Produktion.
-      BEISPIELE: "Automobilindustrie", "Handelspolitik", "Produktionsstandorte", "Wirtschaftliche Auswirkungen", "Supply Chain"
+    - **fine_line:** Für technische, präzise und detaillierte Darstellungen. Wähle diesen Stil für Architektur, Ingenieurwesen, wissenschaftliche Diagramme oder wenn es um die genaue Funktionsweise von etwas geht.
+      *Stichworte: Blueprint, technisches Diagramm, Systemarchitektur, Spezifikationen.*
 
-    **WICHTIG:**
-    - Wenn es um REALE Industrien geht (Auto, Energie, Produktion, Handel) → photorealistic
-    - Wenn es um KONZEPTE geht (Strategie, Innovation, digitale Themen) → flat_illustration
-    - Wenn es um TECHNISCHE DETAILS geht (Architektur, Prozesse) → fine_line
+    **Abwägungsprozess:**
+    1. Analysiere den Inhalt der Folie.
+    2. Wenn der Inhalt sehr stark auf ein reales, physisches Thema hindeutet (z.B. "Unsere Produktionsstandorte in Asien"), ist 'photorealistic' wahrscheinlich richtig.
+    3. Wenn der Inhalt eher konzeptionell ist (z.B. "Unsere Wachstumsstrategie für Q3"), ist 'flat_illustration' oft die bessere Wahl, auch wenn es um ein wirtschaftliches Thema geht.
+    4. Wähle 'fine_line' nur bei sehr technischen Inhalten.
+    5. Triff die beste Entscheidung für eine visuell ansprechende und passende Folie.
 
-    **Folie:**
+    **Inhalt der Folie:**
     {content_summary}
 
     **Deine Aufgabe:**
-    Wähle den passendsten Stil. Antworte NUR mit einem der drei Stilnamen: flat_illustration, fine_line, oder photorealistic
+    Antworte NUR mit dem Namen des am besten passenden Stils: flat_illustration, fine_line, oder photorealistic.
     """
 
     response = llm.invoke(prompt)
@@ -241,7 +241,6 @@ def has_subtitle_only(layout):
         if "BODY" in ph_type:
             return False  # Hat BODY, also nicht "nur subtitle"
     return has_subtitle
-
 
 
 
@@ -363,7 +362,7 @@ def generate_ppt_with_agent(presentation_data, language="Deutsch", template_name
 
         if template_file and template_analysis:
             print(f"✓ Template via MCP geladen: {template_name}")
-            print(f"  Dimensionen: {template_analysis['slide_width_inches']}\" x {template_analysis['slide_height_inches']}\"")
+            print(f'  Dimensionen: {template_analysis["slide_width_inches"]}" x {template_analysis["slide_height_inches"]}"')
             print(f"  Verfügbare Layouts: {template_analysis['total_layouts']}")
             print("  Template Analysis (first 2000 chars):")
             print(json.dumps(template_analysis, indent=2)[:2000])
@@ -407,6 +406,11 @@ def generate_ppt_with_agent(presentation_data, language="Deutsch", template_name
     total_slides = len(presentation_data.slides)
 
     for i, slide_data in enumerate(presentation_data.slides):
+        # CANCELLATION CHECK
+        if st.session_state.get('cancel_requested', False):
+            print("--> Abbrechen-Anfrage im PPT-Agent erkannt. Beende Generierung.")
+            raise Exception("Präsentations-Erstellung durch Benutzer abgebrochen.")
+        
         print(f"Slide {i+1}: {slide_data.title}")
 
         # Agent entscheidet Layout
@@ -442,7 +446,7 @@ def generate_ppt_with_agent(presentation_data, language="Deutsch", template_name
             for shape in slide.placeholders:
                 if shape.placeholder_format.idx == 1 and shape.has_text_frame:
                     shape.text_frame.text = subtitle_text
-                    print(f"  Subtitle gesetzt: '{subtitle_text[:50]}...'")
+                    print(f"  Subtitle gesetzt: '{subtitle_text[:50]}...'" )
                     break
 
         # CONTENT SLIDES: Content einfügen
@@ -507,7 +511,7 @@ def generate_ppt_with_agent(presentation_data, language="Deutsch", template_name
                         top=img_top,
                         width=img_width
                     )
-                    print(f"  ✓ Bild eingefügt (Position: {img_left/914400:.1f}\" x {img_top/914400:.1f}\")")
+                    print(f'  ✓ Bild eingefügt (Position: {img_left/914400:.1f}" x {img_top/914400:.1f}")')
                 except Exception as e:
                     print(f"  ⚠ Bild-Fehler: {e}")
 

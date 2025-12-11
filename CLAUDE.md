@@ -6,75 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 AI Presentation Factory - A Python application that generates PowerPoint presentations from PDF documents using Google's Gemini LLM and multiple AI agents. The system demonstrates Agent vs. MCP architecture with intelligent PPT generation.
 
-## Architecture
-
-![Sequenzdiagramm](resource/Sequenzdiagram%20PoC.png)
-
-The application consists of two Docker services with a **multi-agent architecture**:
-
-1. **agent-app (Streamlit Client)** - Port 8501
-   - Web UI for uploading PDFs and configuring presentations
-   - Hosts multiple AI agents
-   - Communicates with MCP server via SSE (Server-Sent Events)
-
-2. **mcp-server (FastAPI Backend)** - Port 8010 (internal 8000)
-   - Tool provider server with multiple tools
-   - PDF Tools: `read_pdf_file`
-   - Template Tools: `list_templates`, `analyze_template`, `get_template_file`
-   - Communicates via MCP protocol using SSE
-   - Templates stored in `/data/templates/` (Docker volume)
-
-### Multi-Agent System
-
-The application uses **3 specialized AI agents**:
-
-#### Agent 1: Content Planning Agent (`agent_logic.py`)
-- **Purpose:** Analyzes PDFs and creates presentation structure
-- **Tools:** Calls MCP `read_pdf_file` to get PDF content
-- **LLM:** Gemini 2.5 Flash with structured output
-- **Output:** `PresentationStructure` with slides, bullets, sources
-
-#### Agent 2: PPT Builder Agent (`ppt_agent.py`)
-- **Purpose:** Intelligently generates PowerPoint with optimal layouts and images
-- **Tools:** Calls MCP `list_templates`, `analyze_template`, `get_template_file`
-- **Pure Agent:** NO direct file system access - all data via MCP!
-- **Intelligence:**
-  - Loads template as Base64-encoded bytes via MCP
-  - Analyzes template structure via MCP
-  - LLM-based layout selection via `decide_layout_for_slide()`
-  - Chooses best layout for each slide based on content type
-  - Adapts to any template automatically (no hard-coding)
-  - **Image Style Decision:** `decide_image_style_for_slide()` - Agent wählt passenden Bildstil (flat_illustration, fine_line, photorealistic)
-  - **Color Decision:** `decide_colors_for_presentation()` - Agent wählt Farbschema basierend auf Thema
-- **Output:** Professional PPTX file with AI-generated images
-
-#### Agent 3: QA/Reviewer Agent (Planned)
-- **Purpose:** Quality control and validation
-- **Future:** Will review generated PPTs and suggest improvements
-
-### Key Workflow
-
-1. User uploads PDFs and selects template via Streamlit UI
-2. **Agent 1** calls MCP `read_pdf_file` for each PDF
-3. **Agent 1** sends combined text to Gemini → returns `PresentationStructure`
-4. **Agent 2** calls MCP `list_templates` and `analyze_template`
-5. **Agent 2** uses LLM to decide optimal layout for each slide
-6. **Agent 2** generates PPTX with intelligent layout choices
-7. User downloads completed presentation
-
-### Agent vs. MCP Philosophy
-
-- **Agents** make intelligent decisions using LLMs (what to do)
-- **MCP Server** provides tools and data access (how to do it)
-- **Templates** are served via MCP (not hard-coded paths)
-- **Scalable:** New templates work automatically without code changes
-
 ## Commands
 
-### Development
+### Docker Development (Recommended)
 
 ```bash
-# Build and run with Docker Compose
+# Build and run all services
 docker-compose up --build
 
 # Run without rebuilding
@@ -82,174 +19,223 @@ docker-compose up
 
 # Stop services
 docker-compose down
+
+# View logs for specific service
+docker-compose logs -f agent-app
+docker-compose logs -f mcp-server
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+python -m pytest test_*.py
+
+# Run specific test file
+python -m pytest test_ppt_agent.py -v
+
+# Run with mock LLM (tests use unittest.mock)
+python -m unittest test_ppt_agent.py
 ```
 
 ### Access Points
 
 - Streamlit UI: http://localhost:8501
-- MCP Server: http://localhost:8010 (internal communication only)
+- MCP Server: http://localhost:8010 (internal: 8000)
+- ngrok Dashboard: http://localhost:4040 (external tunnel with basic auth)
 
-### Environment Variables Required
+### Portainer Deployment
 
-Create a `.env` file with:
+```bash
+# 1. Build and tag images for registry
+docker build -t ai-presentation-factory/agent-app:latest .
+docker build -t ai-presentation-factory/mcp-server:latest .
+
+# 2. Push to your registry (example: Docker Hub)
+docker tag ai-presentation-factory/agent-app:latest myregistry/ppt-agent:latest
+docker tag ai-presentation-factory/mcp-server:latest myregistry/ppt-mcp:latest
+docker push myregistry/ppt-agent:latest
+docker push myregistry/ppt-mcp:latest
+
+# 3. In Portainer:
+#    - Stacks → Add Stack
+#    - Upload docker-compose.portainer.yml
+#    - Set environment variables (see .env.example)
+#    - Deploy
+```
+
+**Required Portainer Environment Variables:**
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GOOGLE_API_KEY` | Yes | Google Gemini API key |
+| `REGISTRY` | No | Image registry prefix |
+| `TAG` | No | Image tag (default: latest) |
+| `NGROK_AUTHTOKEN` | No | For external access |
+| `NGROK_BASIC_AUTH` | No | Format: `user:pass` |
+
+**Volumes (auto-created):**
+- `ppt-data` - Uploaded PDFs and generated presentations
+- `ppt-templates` - PowerPoint templates (upload via volume)
+
+### Environment Variables
+
+For local development, create `.env` file (see `.env.example`):
 ```
 GOOGLE_API_KEY="your_google_api_key"
-N8N_WEBHOOK_URL="your_n8n_webhook_url"  # Optional
+NGROK_AUTHTOKEN="your_ngrok_token"       # Optional
+N8N_WEBHOOK_URL="your_n8n_webhook_url"   # Optional
 N8N_AUTH_TOKEN="your_n8n_auth_token"     # Optional
-MCP_SERVER_URL="http://mcp-server:8000/sse"  # Set in docker-compose
 ```
+
+## Architecture
+
+![Sequenzdiagramm](resource/Sequenzdiagram%20PoC.png)
+
+Three Docker services with multi-agent architecture:
+
+1. **agent-app** (Port 8501) - Streamlit UI + AI agents
+2. **mcp-server** (Port 8010→8000) - FastAPI tool provider via MCP/SSE
+3. **ngrok** (Port 4040) - External tunnel (auth: Student/hslu5in5rotkreuz)
+
+### Multi-Agent System
+
+**Agent 1: Content Planning** (`agent_logic.py`)
+- Reads PDFs via MCP `read_pdf_file`
+- Uses Gemini 2.5 Flash with structured output
+- Returns `PresentationStructure` with slides, bullets, sources
+
+**Agent 2: PPT Builder** (`ppt_agent.py`)
+- NO direct filesystem access - pure MCP agent
+- Calls `list_templates`, `analyze_template`, `get_template_file`
+- LLM-based layout selection via `decide_layout_for_slide()`
+- Image style decision via `decide_image_style_for_slide()`
+- Color scheme selection via `decide_colors_for_presentation()`
+
+**Agent 3: QA/Reviewer** (Planned)
+
+### Workflow
+
+1. User uploads PDFs → Agent 1 reads via MCP
+2. Agent 1 → Gemini → `PresentationStructure`
+3. Agent 2 analyzes template via MCP
+4. Agent 2 generates PPTX with intelligent layouts
+5. User downloads presentation
+
+### Agent vs. MCP Philosophy
+
+- **Agents**: Make intelligent decisions using LLMs (what to do)
+- **MCP Server**: Provides tools and data access (how to do it)
+- **Templates**: Served via MCP (not hard-coded paths)
 
 ## Code Structure
 
 ### Core Files
 
-- `app.py` - Streamlit UI with session state management, file upload, and generation workflow
-- `agent_logic.py` - Orchestrates PDF reading via MCP and LLM planning via Gemini
-- `ppt_engine.py` - PowerPoint generation with template support and image insertion
-- `mcp_server.py` - FastAPI/MCP tool server for PDF reading
+- `app.py` - Streamlit UI with session state management
+- `agent_logic.py` - Agent 1: PDF reading + Gemini planning
+- `ppt_agent.py` - Agent 2: Intelligent PPT generation
+- `ppt_engine.py` - PowerPoint generation utilities
+- `mcp_server.py` - FastAPI/MCP tool server
 - `data_models.py` - Pydantic models for structured LLM output
+- `image_providers.py` - Image generation (Gurkli API + fallback)
 
 ### Data Models (data_models.py)
 
-All models use Pydantic with `default=[]` for optional lists to prevent LLM output errors:
+All models use `default=[]` for optional lists to prevent LLM output errors:
 
-- `Source` - Document references (documentId, pageNumber)
-- `BulletItem` - Bullet points with optional sub-bullets
-- `ImageColors` - Farbschema mit primary/secondary Hex-Codes
-- `CustomerSlide` - Complete slide structure mit zusätzlichen Bildfeldern:
-  - `ImageKeywords` - Optional, überschreibt unsplashSearchTerms
-  - `style` - Bildstil: "auto", "flat_illustration", "fine_line", "photorealistic"
-  - `image_mode` - Bildquelle: "auto", "stock_only", "ai_only"
-  - `ai_model` - AI-Modell: "auto", "flux", "banana"
-  - `colors` - Optional ImageColors für Farbschema
-- `PresentationStructure` - Full presentation with list of slides
+- `PresentationStructure` - Top-level container with list of `CustomerSlide`
+- `CustomerSlide` - Slide with title, bullets, sources, image settings:
+  - `style`: "auto" | "flat_illustration" | "fine_line" | "photorealistic"
+  - `image_mode`: "auto" | "stock_only" | "ai_only"
+  - `ai_model`: "auto" | "flux" | "banana"
+  - `colors`: Optional `ImageColors` (primary/secondary hex codes)
+- `BulletItem` - Bullet with optional sub-bullets
+- `Source` - Document reference (documentId, pageNumber)
 
 ### MCP Communication
 
-The MCP server uses SSE transport:
-- Client connects via `sse_client(mcp_server_url)`
-- Async session calls `call_tool("read_pdf_file", arguments={"filename": ...})`
-- Server returns text content wrapped in `types.TextContent`
-
-### Template System
-
-Templates are loaded from `ppt_templates/` directory:
-- Supports `.pptx` and `.potx` files
-- All existing slides are deleted from template before generation
-- Layouts are matched by name: "Title Slide" and "Title and Content"
-- Falls back to index-based layout selection if names don't match
-
-### Image Generation (image_providers.py)
-
-Primary: `get_image_from_gurkli()` - Sends slide data to https://langchain.gurk.li/generate-image
-Fallback: `get_image_placeholder()` - Uses loremflickr.com for placeholder images
-
-**JSON Payload an Gurkli API:**
-```json
-{
-  "title": "Slide Title",
-  "bullets": [{"bullet": "...", "sub": []}],
-  "ImageKeywords": ["keyword1", "keyword2"],
-  "style": "flat_illustration",
-  "image_mode": "auto",
-  "ai_model": "auto",
-  "colors": {"primary": "#004A7F", "secondary": "#E37222"}
-}
+SSE transport pattern:
+```python
+async with sse_client(mcp_server_url) as streams:
+    async with ClientSession(streams[0], streams[1]) as session:
+        await session.initialize()
+        result = await session.call_tool("tool_name", arguments={...})
 ```
 
-**Verfügbare Optionen:**
-- `style`: "flat_illustration" | "fine_line" | "photorealistic"
-- `image_mode`: "auto" | "stock_only" | "ai_only"
-- `ai_model`: "auto" | "flux" | "banana"
-
-**Agent-Entscheidungen (wenn "auto"):**
-- Style: Agent analysiert Folieninhalt und wählt passenden Stil
-  - Reale Industrien (Auto, Handel) → photorealistic
-  - Abstrakte Konzepte (Innovation) → flat_illustration
-  - Technische Details → fine_line
-- Colors: Agent wählt Farbschema basierend auf Präsentationsthema
-
-## Important Implementation Details
-
-### UI Layout (app.py)
-
-Die App hat einen linearen Flow ohne Sidebar:
-
-1. **PDF-Dokumente hochladen** - Drag & Drop oder Dateiauswahl
-2. **Sprache und Umfang** - Sprache (Dropdown) + Folienanzahl (Slider 3-20)
-3. **Design-Template auswählen** - Grid mit Screenshots (4 Spalten)
-   - Screenshots in `data/templates/Screeenshot/`
-   - Klick zum Auswählen/Abwählen (Toggle)
-4. **Bild-Einstellungen** - 3 Spalten:
-   - Bildstil: auto, flat_illustration, fine_line, photorealistic
-   - Bildquelle: auto, stock_only, ai_only
-   - Eigene Farben: Optional mit Color Picker
-5. **Präsentation generieren** - Zusammenfassung + Buttons
-
-### Streamlit Theme (.streamlit/config.toml)
-
-Helles Theme-Konfiguration:
-```toml
-[theme]
-primaryColor = "#0066CC"
-backgroundColor = "#FFFFFF"
-secondaryBackgroundColor = "#F5F7FA"
-textColor = "#1A1A1A"
-font = "sans serif"
-```
-
-### Session State Management
-
-Streamlit uses `st.session_state` for:
-- `uploaded_files_data` - Current uploaded files
-- `saved_pdf_paths` - Paths to saved PDFs in storage
-- `cancel_requested` - Flag for canceling generation
-- `selected_template_name` - Ausgewähltes Template
-
-### Async/Sync Bridging
-
-`agent_logic.py` uses `asyncio.run()` to call async MCP functions from synchronous Streamlit context:
+Sync-to-async bridge in Streamlit context:
 ```python
 combined_text = asyncio.run(fetch_pdf_content_via_mcp(pdf_paths_list))
 ```
 
+### MCP Tools (mcp_server.py)
+
+| Tool | Description |
+|------|-------------|
+| `read_pdf_file` | Extract text from PDF in `/data/` |
+| `list_templates` | List available `.pptx`/`.potx` templates |
+| `analyze_template` | Get layout structure with classified types |
+| `get_template_file` | Return template as Base64-encoded bytes |
+| `get_template_path` | Return filesystem path (legacy) |
+
+### Template System
+
+- Templates in `data/templates/`, screenshots in `data/templates/Screenshot/`
+- Layout classification via `classify_layout()` in `mcp_server.py`
+- Categories: "Title and Subtitle", "Title and Content", "Title, Content and Image", "Title Only", "Two Content", "Image Only", "Content Only"
+
+### Image Generation (image_providers.py)
+
+- Primary: `get_image_from_gurkli()` → https://langchain.gurk.li/generate-image (60s timeout)
+- Fallback: `get_image_placeholder()` → loremflickr.com
+
+When style="auto", Agent 2 decides based on content:
+- Real industries (automotive, trade) → photorealistic
+- Abstract concepts (innovation, strategy) → flat_illustration
+- Technical details (architecture, specs) → fine_line
+
+## Implementation Details
+
+### UI Flow (app.py)
+
+Linear flow without sidebar:
+1. PDF upload (drag & drop)
+2. Language + slide count (3-20)
+3. Template selection (grid with screenshots from `data/templates/Screenshot/`)
+4. Image settings (style, source, colors)
+5. Generate button
+
+### Session State Keys
+
+- `uploaded_files_data` - Current uploaded files
+- `saved_pdf_paths` - Paths to saved PDFs
+- `cancel_requested` - Generation cancellation flag
+- `selected_template_name` - Selected template
+
 ### Language Support
 
-The app supports multi-language presentations:
-- Languages: Deutsch, English, Français, Italiano, Español
-- Language parameter is passed through the entire pipeline
-- Affects LLM prompt and source labels in generated PPTX
+Languages: Deutsch, English, Français, Italiano, Español
+- Passed through entire pipeline
+- Affects LLM prompt and source labels
 
 ### LLM Configuration
 
-Gemini is configured with:
-- Model: `gemini-2.5-flash`
-- Temperature: 0.2
-- Structured output via `.with_structured_output(PresentationStructure)`
+```python
+ChatGoogleGenerativeAI(
+    model="gemini-2.5-flash",
+    temperature=0.2,  # Agent 1: 0.2, Agent 2: 0.3
+).with_structured_output(PresentationStructure)
+```
 
-The prompt instructs Gemini to:
-- Create exactly N slides (user-specified)
-- Keep bullets extremely concise (3-4 bullets, max 10 words)
-- Generate 3 English search terms for images
-- Output in specified language
+### Volume Mapping (Critical)
 
-### Volume Mapping
-
-Docker volumes are critical for data sharing:
+Both containers must access same files:
 - `./data:/app/storage` (agent-app) - PDFs uploaded by user
-- `./data:/data` (mcp-server) - Same PDFs accessible to server
-- Both containers need access to the same files
+- `./data:/data` (mcp-server) - Same PDFs for MCP tools
 
-### Error Handling
+### Cancellation
 
-Image generation has multiple fallback layers:
-1. Try gurk.li API (60s timeout)
-2. Fall back to loremflickr placeholder
-3. If image insertion fails in template, manually position at fixed coordinates
-
-## Notes for Development
-
-- The MCP server must be running before the agent-app starts (controlled by `depends_on` in docker-compose)
-- Session state prevents re-uploading files on every Streamlit rerun
-- Cancel button uses callback to set session state flag and `st.stop()` to halt execution
-- Template placeholder matching tries by type first, then falls back to idx > 10 for picture placeholders
+Check in generation loops:
+```python
+if st.session_state.get('cancel_requested', False):
+    raise Exception("Cancelled by user")
+```

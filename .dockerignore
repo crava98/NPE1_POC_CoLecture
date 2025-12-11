@@ -1,0 +1,48 @@
+# Git
+.git
+.gitignore
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.pptx
+*.pdf
+data/
+!data/templates/
+
+# Documentation
+*.md
+!CLAUDE.md
+
+# Docker
+docker-compose*.yml
+!docker-compose.portainer.yml
+Dockerfile.dev
+
+# Test files
+test_*.py
+*.test.py

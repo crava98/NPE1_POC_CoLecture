@@ -12,14 +12,15 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------------------------------
-# CUSTOM CSS - Modernes Styling mit Glassmorphism
+# CUSTOM CSS - UMGESETZTE VERBESSERUNGSVORSCHLÄGE
 # -----------------------------------------------------------------------------
 custom_css = """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
+        color: #1f2937; /* Vorschlag 1: Bessere Lesbarkeit */
     }
 
     .stApp {
@@ -32,7 +33,6 @@ custom_css = """
         max-width: 1200px;
     }
 
-    /* Karten-Styling (Glassmorphism) */
     div.css-card {
         background-color: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(10px);
@@ -49,15 +49,24 @@ custom_css = """
         box-shadow: 0 8px 30px rgba(0,0,0,0.12);
     }
 
-    /* Section Headers */
+    /* Vorschlag 1 & 3: Header mit Icons */
     .section-header {
-        font-size: 1.1rem;
-        font-weight: 600;
+        font-size: 1.2rem;
+        font-weight: 700;
         color: #1a1a2e;
-        margin-bottom: 16px;
+        margin-bottom: 20px;
         padding-bottom: 8px;
         border-bottom: 2px solid #3b82f6;
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+    .section-header svg { /* Icon Styling */
+        margin-right: 12px;
+        stroke-width: 2.5px;
+        color: #3b82f6;
+        width: 22px;
+        height: 22px;
     }
 
     .section-number {
@@ -67,10 +76,9 @@ custom_css = """
         border-radius: 20px;
         font-size: 0.85rem;
         font-weight: 600;
-        margin-right: 10px;
+        margin-left: auto; /* Schiebt die Nummer nach rechts */
     }
 
-    /* Template Card Styling */
     .template-card {
         background: white;
         border-radius: 12px;
@@ -90,27 +98,29 @@ custom_css = """
         background: #eff6ff;
     }
 
-    /* Custom Button Styling */
+    /* Vorschlag 2: Modernere Buttons */
     .stButton > button {
-        background: linear-gradient(45deg, #3b82f6, #2563eb);
+        background: #3b82f6;
         color: white;
         border: none;
-        padding: 0.6rem 1.5rem;
+        padding: 0.7rem 1.6rem;
         border-radius: 10px;
         font-weight: 600;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.06);
     }
 
     .stButton > button:hover {
-        background: linear-gradient(45deg, #2563eb, #1d4ed8);
-        box-shadow: 0 6px 12px -1px rgba(59, 130, 246, 0.5);
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
     }
 
-    .stButton > button:disabled {
-        background: #e5e7eb;
-        box-shadow: none;
+    .stButton > button:disabled, .stButton > button:disabled:hover {
+        background: #e5e7eb !important;
+        color: #9ca3af !important;
+        box-shadow: none !important;
+        transform: none !important;
+        cursor: not-allowed !important;
     }
 
     /* Metric Cards */
@@ -182,8 +192,10 @@ def card_start():
 def card_end():
     st.markdown('</div>', unsafe_allow_html=True)
 
-def section_header(number, title):
-    st.markdown(f'<div class="section-header"><span class="section-number">{number}</span>{title}</div>', unsafe_allow_html=True)
+def section_header(number, title, icon_name=None):
+    icon_html = f'<i data-feather="{icon_name}"></i>' if icon_name else ''
+    st.markdown(f'<div class="section-header">{icon_html}<span>{title}</span><span class="section-number">{number}</span></div>', unsafe_allow_html=True)
+
 
 # -----------------------------------------------------------------------------
 # STORAGE & SESSION STATE
@@ -226,7 +238,7 @@ st.markdown("---")
 # SCHRITT 1: PDF-Dateien hochladen
 # =============================================================================
 card_start()
-section_header("1", "PDF-Dokumente hochladen")
+section_header("1", "PDF-Dokumente hochladen", icon_name="upload-cloud")
 
 new_uploaded_files = st.file_uploader(
     "Ziehe deine PDF-Dateien hierher oder klicke zum Auswählen",
@@ -258,7 +270,7 @@ card_end()
 # SCHRITT 2: Sprache und Folienanzahl
 # =============================================================================
 card_start()
-section_header("2", "Sprache und Umfang")
+section_header("2", "Sprache und Umfang", icon_name="sliders")
 
 col1, col2 = st.columns(2)
 
@@ -284,7 +296,7 @@ card_end()
 # SCHRITT 3: Template auswählen
 # =============================================================================
 card_start()
-section_header("3", "Design-Template auswählen")
+section_header("3", "Design-Template auswählen", icon_name="layout")
 
 try:
     templates_data = asyncio.run(get_templates_from_mcp())
@@ -339,7 +351,7 @@ card_end()
 # SCHRITT 4: Bildeinstellungen
 # =============================================================================
 card_start()
-section_header("4", "Bild-Einstellungen")
+section_header("4", "Bild-Einstellungen", icon_name="image")
 
 col1, col2, col3 = st.columns(3)
 
@@ -394,7 +406,7 @@ card_end()
 # SCHRITT 5: Präsentation erstellen
 # =============================================================================
 card_start()
-section_header("5", "Präsentation generieren")
+section_header("5", "Präsentation generieren", icon_name="play-circle")
 
 if st.session_state.uploaded_files_data:
     summary_cols = st.columns(4)
@@ -496,3 +508,14 @@ if generate_button:
 st.markdown("---")
 with st.expander("Architektur und Ablauf"):
     st.image("resource/Sequenzdiagram PoC.png", caption="AI Presentation Factory - Sequenzdiagramm", width="stretch")
+
+# VORSCHLAG 3: Feather Icons laden und initialisieren
+st.components.v1.html("""
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script>
+        // Kleiner Timeout, um sicherzustellen, dass das DOM bereit ist
+        setTimeout(() => {
+            feather.replace();
+        }, 100);
+    </script>
+""", height=0)

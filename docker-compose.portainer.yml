@@ -1,0 +1,90 @@
+version: "3.8"
+
+# =============================================================================
+# AI Presentation Factory - Portainer Stack
+# =============================================================================
+# Deployment:
+# 1. Push images to registry (see README)
+# 2. Create Stack in Portainer
+# 3. Set environment variables in Portainer UI
+# 4. Deploy
+# =============================================================================
+
+services:
+  # 1. Agent App (Streamlit Client)
+  agent-app:
+    image: ${REGISTRY:-}ai-presentation-factory/agent-app:${TAG:-latest}
+    container_name: ppt-agent-app
+    restart: unless-stopped
+    depends_on:
+      - mcp-server
+    volumes:
+      - ppt-data:/app/storage
+    ports:
+      - "${AGENT_PORT:-8501}:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MCP_SERVER_URL=http://mcp-server:8000/sse
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-}
+      - N8N_AUTH_TOKEN=${N8N_AUTH_TOKEN:-}
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - ppt-network
+
+  # 2. MCP Server (Tool Provider)
+  mcp-server:
+    image: ${REGISTRY:-}ai-presentation-factory/mcp-server:${TAG:-latest}
+    container_name: ppt-mcp-server
+    restart: unless-stopped
+    entrypoint: ["uvicorn", "mcp_server:app", "--host", "0.0.0.0", "--port", "8000"]
+    volumes:
+      - ppt-data:/data
+      - ppt-templates:/data/templates
+    ports:
+      - "${MCP_PORT:-8010}:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/sse"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - ppt-network
+
+  # 3. ngrok Tunnel (Optional - für externen Zugriff)
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: ppt-ngrok
+    restart: unless-stopped
+    profiles:
+      - external  # Nur starten wenn explizit aktiviert
+    depends_on:
+      - agent-app
+    ports:
+      - "${NGROK_DASHBOARD_PORT:-4040}:4040"
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    command:
+      - "http"
+      - "--basic-auth=${NGROK_BASIC_AUTH:-admin:changeme}"
+      - "agent-app:8501"
+    networks:
+      - ppt-network
+
+volumes:
+  ppt-data:
+    driver: local
+  ppt-templates:
+    driver: local
+
+networks:
+  ppt-network:
+    driver: bridge

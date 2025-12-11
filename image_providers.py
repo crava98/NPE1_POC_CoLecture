@@ -7,108 +7,19 @@ import uuid
 N8N_WEBHOOK_URL = os.environ.get("N8N_WEBHOOK_URL")
 N8N_AUTH_TOKEN = os.environ.get("N8N_AUTH_TOKEN")
 
-def get_image_placeholder(terms):
-    """Fallback: Lädt ein Platzhalterbild von loremflickr."""
-    search_term = "business"
-    if terms and len(terms) > 0:
-        search_term = terms[0]
-    
-    url = f"https://loremflickr.com/800/450/{search_term},work"
-    print(f"--> Hole Platzhalter-Bild für: {search_term}")
-    
-    try:
-        response = requests.get(url, timeout=5)
-        if response.status_code == 200:
-            filename = f"placeholder_{search_term}.jpg"
-            path = os.path.join("storage", filename)
-            with open(path, "wb") as f:
-                f.write(response.content)
-            return path
-    except Exception:
-        pass
+def get_local_error_placeholder():
+    """
+    Gibt den Pfad zum lokalen Fallback-Bild zurück.
+    """
+    placeholder_path = "resource/Gemini_Generated_Image_yj7jhnyj7jhnyj7j.png"
+    print(f"--> API-Fehler. Verwende lokalen Platzhalter: {placeholder_path}")
+    # Prüfen, ob die Datei existiert, um Fehler zu vermeiden
+    if os.path.exists(placeholder_path):
+        return placeholder_path
+    # Wenn selbst der lokale Platzhalter fehlt, geben wir nichts zurück
+    print(f"--> WARNUNG: Lokaler Platzhalter nicht gefunden unter {placeholder_path}")
     return None
 
-def get_image_from_n8n(slide_data):
-    """
-    Sendet das KOMPLETTE Slide-Objekt als JSON an n8n.
-    Erwartet ein JSON mit einer URL zum Bild als Antwort zurück.
-    """
-    # 1. Prüfen ob URL da ist
-    if not N8N_WEBHOOK_URL:
-        print("n8n URL fehlt -> Platzhalter.")
-        return get_image_placeholder(slide_data.unsplashSearchTerms)
-
-    # 2. Das Payload bauen (Das volle Objekt!)
-    payload = slide_data.model_dump() # type: ignore
-    
-    # NEU: Korrelations-ID für Tracing hinzufügen
-    correlation_id = str(uuid.uuid4())
-    payload['correlation_id'] = correlation_id
-    print(f"--> Korrelations-ID für n8n-Trace: {correlation_id}")
-
-    # --- DEBUGGING: ZEIGT DIR DAS JSON IM TERMINAL AN ---
-    print("\n" + "="*40)
-    print(f"--> DEBUG: SENDE DIESES JSON AN N8N:")
-    print(json.dumps(payload, indent=2, ensure_ascii=False))
-    print("="*40 + "\n")
-    # ----------------------------------------------------
-
-    headers = {
-        "hslu": N8N_AUTH_TOKEN,
-        "Content-Type": "application/json" 
-    }
-
-    try:
-        # Wir senden JSON und erwarten JSON zurück
-        response = requests.post(
-            N8N_WEBHOOK_URL,
-            data=json.dumps(payload), # Manuell enkodieren
-            headers=headers,
-            timeout=45
-        )
-
-        # 3. Antwort verarbeiten
-        if response.status_code == 200:
-            print("--> n8n Erfolg! JSON-Antwort empfangen.")
-            
-            # JSON parsen
-            response_data = response.json()
-            
-            # URL extrahieren
-            image_url = response_data[0].get("url")
-            if not image_url:
-                print("n8n Fehler: Kein 'url' Feld im JSON gefunden.")
-                return get_image_placeholder(slide_data.unsplashSearchTerms)
-
-            # Bild von der URL herunterladen
-            print(f"--> Lade Bild von URL: {image_url[:50]}...")
-            image_response = requests.get(image_url, timeout=30)
-            
-            if image_response.status_code == 200:
-                # Dateinamen basteln
-                terms = slide_data.unsplashSearchTerms
-                safe_name = "slide_img"
-                if terms:
-                    safe_name = "".join(x for x in terms[0] if x.isalnum())
-                
-                filename = f"img_{safe_name}.jpg"
-                path = os.path.join("storage", filename)
-
-                # Das Bild speichern (Binary Content)
-                with open(path, "wb") as f:
-                    f.write(image_response.content)
-                return path
-            else:
-                print(f"Fehler beim Download des Bildes: {image_response.status_code}")
-                return get_image_placeholder(slide_data.unsplashSearchTerms)
-            
-        else:
-            print(f"n8n Fehler: {response.status_code} - {response.text}")
-            return get_image_placeholder(slide_data.unsplashSearchTerms)
-
-    except Exception as e:
-        print(f"n8n Exception: {e}")
-        return get_image_placeholder(slide_data.unsplashSearchTerms)
 
 def get_image_from_gurkli(slide_data):
     """
@@ -176,7 +87,7 @@ def get_image_from_gurkli(slide_data):
             image_url = response_data.get("url")
             if not image_url:
                 print("gurk.li Fehler: Kein 'url' Feld im JSON gefunden.")
-                return get_image_placeholder(image_keywords)
+                return get_local_error_placeholder()
 
             print(f"--> Lade Bild von URL: {image_url[:50]}...")
             image_response = requests.get(image_url, timeout=30)
@@ -194,11 +105,11 @@ def get_image_from_gurkli(slide_data):
                 return path
             else:
                 print(f"Fehler beim Download des Bildes von gurk.li: {image_response.status_code}")
-                return get_image_placeholder(image_keywords)
+                return get_local_error_placeholder()
         else:
             print(f"gurk.li Fehler: {response.status_code} - {response.text}")
-            return get_image_placeholder(image_keywords)
+            return get_local_error_placeholder()
 
     except Exception as e:
         print(f"gurk.li Exception: {e}")
-        return get_image_placeholder(image_keywords)
+        return get_local_error_placeholder()
