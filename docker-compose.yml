@@ -11,7 +11,7 @@ services:
       - "${AGENT_PORT:-8501}:8501"
     environment:
       - PYTHONUNBUFFERED=1
-      - MCP_SERVER_URL=http://mcp-server:8000/sse
+      - MCP_SERVER_URL=http://192.168.100.21:8020/sse
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
       - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-}
       - N8N_AUTH_TOKEN=${N8N_AUTH_TOKEN:-}
