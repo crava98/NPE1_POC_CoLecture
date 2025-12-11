@@ -13,8 +13,8 @@ from starlette.requests import Request
 
 # 1. Server definieren
 mcp = Server("pdf-and-template-service")
-STORAGE_DIR = "/data"
-TEMPLATES_DIR = "/data/templates"
+STORAGE_DIR = "/uploads"  # PDF uploads (separate volume)
+TEMPLATES_DIR = "/data/templates"  # Templates (baked into image)
 
 # 2. Tool Definition
 @mcp.list_tools()

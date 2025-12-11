@@ -6,7 +6,7 @@ services:
     depends_on:
       - mcp-server
     volumes:
-      - ppt-data:/app/storage
+      - ppt-uploads:/app/storage
     ports:
       - "${AGENT_PORT:-8501}:8501"
     environment:
@@ -24,7 +24,8 @@ services:
     container_name: mcp-server
     entrypoint: ["uvicorn", "mcp_server:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
-      - ppt-data:/data
+      # Uploads separat von Templates
+      - ppt-uploads:/uploads
     ports:
       - "${MCP_PORT:-8020}:8000"
     environment:
@@ -49,7 +50,7 @@ services:
       - cloudflare_net
 
 volumes:
-  ppt-data:
+  ppt-uploads:
     driver: local
 
 networks:

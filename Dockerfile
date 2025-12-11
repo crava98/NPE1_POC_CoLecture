@@ -24,7 +24,7 @@ COPY data/templates/ /data/templates/
 RUN ls -la /app/ && ls -la /data/templates/
 
 # Create directories for runtime data
-RUN mkdir -p /app/storage
+RUN mkdir -p /app/storage /uploads
 
 # Expose ports (8501 for Streamlit, 8000 for MCP)
 EXPOSE 8501 8000
