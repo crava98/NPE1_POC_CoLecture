@@ -18,12 +18,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app.py agent_logic.py ppt_agent.py ppt_engine.py mcp_server.py data_models.py image_providers.py ./
 COPY .streamlit/ ./.streamlit/
 COPY resource/ ./resource/
+COPY data/templates/ /data/templates/
 
 # Debug: List files to verify copy worked
-RUN ls -la /app/
+RUN ls -la /app/ && ls -la /data/templates/
 
 # Create directories for runtime data
-RUN mkdir -p /app/storage /data/templates
+RUN mkdir -p /app/storage
 
 # Expose ports (8501 for Streamlit, 8000 for MCP)
 EXPOSE 8501 8000
