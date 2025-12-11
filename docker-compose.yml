@@ -6,7 +6,6 @@ services:
     depends_on:
       - mcp-server
     volumes:
-      # Nur Daten-Volumes, NICHT .:/app (überschreibt Source Code im Container)
       - ppt-data:/app/storage
     ports:
       - "${AGENT_PORT:-8501}:8501"
@@ -16,6 +15,8 @@ services:
       - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
       - N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL:-}
       - N8N_AUTH_TOKEN=${N8N_AUTH_TOKEN:-}
+    networks:
+      - cloudflare_net
 
   # 2. Der MCP Server (Tool Provider)
   mcp-server:
@@ -23,12 +24,13 @@ services:
     container_name: mcp-server
     entrypoint: ["uvicorn", "mcp_server:app", "--host", "0.0.0.0", "--port", "8000"]
     volumes:
-      # Daten-Volume für PDFs und Templates
       - ppt-data:/data
     ports:
       - "${MCP_PORT:-8020}:8000"
     environment:
       - PYTHONUNBUFFERED=1
+    networks:
+      - cloudflare_net
 
   # 3. ngrok für den externen Zugriff (optional)
   ngrok:
@@ -43,7 +45,13 @@ services:
     environment:
       - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN:-}
     command: ["http", "--basic-auth", "Student:hslu5in5rotkreuz", "agent-app:8501"]
+    networks:
+      - cloudflare_net
 
 volumes:
   ppt-data:
     driver: local
+
+networks:
+  cloudflare_net:
+    external: true
