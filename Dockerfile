@@ -14,9 +14,12 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Application code
-COPY *.py ./
+# Application code - explicit copy to ensure files are included
+COPY app.py agent_logic.py ppt_agent.py ppt_engine.py mcp_server.py data_models.py image_providers.py ./
 COPY .streamlit/ ./.streamlit/
+
+# Debug: List files to verify copy worked
+RUN ls -la /app/
 
 # Create directories for runtime data
 RUN mkdir -p /app/storage /data/templates
